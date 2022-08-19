@@ -8,6 +8,7 @@ const logger = require("morgan");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const catalogRouter = require("./routes/catalog"); 
 
 const app = express();
 
@@ -15,7 +16,7 @@ const app = express();
 const mongoose = require("mongoose");
 const mongoDB = `mongodb+srv://library:${process.env.password}@cluster0.v1gqwfi.mongodb.net/?retryWrites=true&w=majority`;
 
-mongoose.connect(mongoDB, { useNewUrlParse: true, useUnifiedTopology: true });
+mongoose.connect(mongoDB, {useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
@@ -30,8 +31,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// Routes
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/catalog", catalogRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
